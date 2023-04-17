@@ -122,7 +122,7 @@ int main()
     "uniform sampler2D ourTexture;\n"
     "void main()\n"
     "{\n"
-    "   FragColor = texture(ourTexture, texCoord);\n"
+    "   FragColor = texture(ourTexture, texCoord) * vec4(ourColor, 1.0);\n"
     "}";
 
     unsigned int fragmentShader;
