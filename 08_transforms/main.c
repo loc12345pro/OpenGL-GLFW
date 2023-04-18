@@ -58,10 +58,6 @@ int main()
     //printf("After:\n");
     //glm_vec4_print(vec, stderr);
 
-    mat4 trans = GLM_MAT4_IDENTITY_INIT;
-    glm_rotate(trans, glm_rad(90.0f), GLM_ZUP);
-    glm_scale(trans, (vec3){0.5, 0.5, 0.5});
-
     glViewport(0, 0, 800, 600);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);  
 
@@ -212,9 +208,6 @@ int main()
     GLuint idTexture1 = 0;
     GLuint idTexture2 = 0;
 
-    unsigned transformLoc = glGetUniformLocation(shaderProgram, "transform");
-    glUniformMatrix4fv(transformLoc, 1, GL_FALSE, (float *)trans);
-
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, texture1);
     idTexture1 = glGetUniformLocation(shaderProgram, "texture1");
@@ -229,12 +222,20 @@ int main()
 
     glBindVertexArray(VAO);
 
+    unsigned transformLoc = glGetUniformLocation(shaderProgram, "transform");
+
     while(!glfwWindowShouldClose(window))
     {
         processInput(window);
 
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        mat4 trans = GLM_MAT4_IDENTITY_INIT;
+        glm_rotate(trans, (float)glfwGetTime(), GLM_ZUP);
+        glm_scale(trans, (vec3){0.5, 0.5, 0.5});
+
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, (float *)trans);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
